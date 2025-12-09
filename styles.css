@@ -42,6 +42,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url('data:image/
 .correct{outline:2px solid var(--accent2);box-shadow:0 0 0 4px var(--ring-green);animation:pop .18s ease-out}
 .incorrect{outline:2px solid var(--accent3);animation:shake .2s linear 2}
 @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}100%{transform:translateX(0)}}
+.locked .options{opacity:.5;pointer-events:none}
+.locked .blank{border-color:#ef4444;box-shadow:0 0 0 4px var(--ring-red)}
 @keyframes pop{0%{transform:scale(1)}70%{transform:scale(1.06)}100%{transform:scale(1)}}
 .solved .options{opacity:.35;pointer-events:none}
 .solved .blank{background:#11162f;color:#63f5a2;border-color:#22c55e;box-shadow:0 0 0 4px var(--ring-green)}
@@ -62,3 +64,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url('data:image/
 #sparkle{position:fixed;inset:0;pointer-events:none}
 .sparkle{position:fixed;width:8px;height:8px;border-radius:50%;opacity:0;animation:sparkle .6s ease-out forwards}
 @keyframes sparkle{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3)}}
+
+.score{margin:20px auto 10px;max-width:700px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0));border:2px solid #2a3057;border-radius:var(--radius-l);padding:18px;text-align:center;box-shadow:var(--shadow-l)}
+.score .big{font-size:28px;font-weight:800;background:linear-gradient(90deg,#60a5fa,#facc15,#22c55e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.score .stats{margin-top:8px;color:#deebff;font-weight:700}
