@@ -26,6 +26,8 @@ let mistakes=0;
 let solvedCount=0;
 let totalCount=0;
 let starsEarnedPerLevel=[];
+let firstTryCorrect=0;
+let firstTryWrong=0;
 
 const levelData=[
   {
@@ -73,7 +75,8 @@ const levelData=[
 ];
 
 function buildLevels(){
-  levels=levelData.map(l=>({title:l.title,mode:l.mode,items:l.items.map(it=>({s:it.s,c:it.c,opts:pickOptions(it.pool,it.c,4),solved:false}))}));
+  firstTryCorrect=0;firstTryWrong=0;
+  levels=levelData.map(l=>({title:l.title,mode:l.mode,items:l.items.map(it=>({s:it.s,c:it.c,opts:pickOptions(it.pool,it.c,4),solved:false,attempted:false,locked:false,firstCorrect:false}))}));
 }
 
 function pickOptions(pool,correct,count){
@@ -195,7 +198,8 @@ function enableDrop(target,card,idx){
 
 function applyAnswer(target,card,idx,val){
   const correct=target.dataset.correct;
-  if(card.classList.contains('solved'))return;
+  const item=levels[levelIndex].items[idx];
+  if(card.classList.contains('solved')||card.classList.contains('locked'))return;
   if(val===correct){
     target.textContent=val;
     card.classList.add('solved');
@@ -204,9 +208,12 @@ function applyAnswer(target,card,idx,val){
     target.classList.remove('hover');
     playTone(880,120,0.05);
     sparkleBurst(target);
+    item.solved=true;
+    if(!item.attempted){firstTryCorrect++;item.firstCorrect=true;}
+    item.attempted=true;
     solvedCount++;
     updateProgress();
-    if(solvedCount===totalCount){
+    if(getCompletedCount()===totalCount){
       const s=calcStars(mistakes);
       starsEarnedPerLevel[levelIndex]=s;
       updateStarsDisplay(s);
@@ -215,9 +222,25 @@ function applyAnswer(target,card,idx,val){
   } else {
     mistakes++;
     target.classList.add('incorrect');
+    card.classList.add('locked');
+    item.locked=true;
+    if(!item.attempted){firstTryWrong++;}
+    item.attempted=true;
     setTimeout(()=>target.classList.remove('incorrect'),300);
     playTone(120,140,0.05);
+    updateProgress();
+    if(getCompletedCount()===totalCount){
+      const s=calcStars(mistakes);
+      starsEarnedPerLevel[levelIndex]=s;
+      updateStarsDisplay(s);
+      btnNext.classList.remove('hidden');
+    }
   }
+}
+
+function getCompletedCount(){
+  const level=levels[levelIndex];
+  return level.items.filter(x=>x.solved||x.locked).length;
 }
 
 function sparkleBurst(el){
@@ -239,9 +262,10 @@ function sparkleBurst(el){
 }
 
 function updateProgress(){
-  const pct=Math.round((solvedCount/Math.max(1,totalCount))*100);
+  const completed=getCompletedCount();
+  const pct=Math.round((completed/Math.max(1,totalCount))*100);
   progressFill.style.width=pct+'%';
-  progressText.textContent=`${solvedCount}/${totalCount}`;
+  progressText.textContent=`${completed}/${totalCount}`;
 }
 
 function startLevel(i){
@@ -265,6 +289,15 @@ function showFinal(){
   gameScreen.classList.add('hidden');
   finalScreen.classList.remove('hidden');
   runConfetti();
+  const scoreBox=document.getElementById('score');
+  const total=levels.reduce((a,l)=>a+l.items.length,0);
+  const pct=Math.round((firstTryCorrect/Math.max(1,total))*100);
+  let msg='';
+  if(pct>=90)msg='¡Excelente! Dominaste comparatives y superlatives.';
+  else if(pct>=70)msg='¡Muy bien! Sigue practicando para llegar al 100%.';
+  else if(pct>=50)msg='¡Buen esfuerzo! Practica un poco más.';
+  else msg='No te rindas, con práctica lo lograrás.';
+  scoreBox.innerHTML=`<div class="big">Tu puntuación: ${pct}%</div><div class="stats">Aciertos al primer intento: ${firstTryCorrect} &nbsp;|&nbsp; Intentos con error: ${firstTryWrong}</div><div class="stats">${msg}</div>`;
 }
 
 function buildAnswers(){
