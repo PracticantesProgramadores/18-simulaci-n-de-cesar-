@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Comparative & Superlative Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+  <div id="start-screen" class="screen">
+    <div class="title">Comparative & Superlative Quest</div>
+    <div class="icons">
+      <div class="icon">⬆️</div>
+      <div class="icon">⬇️</div>
+      <div class="icon">⭐</div>
+      <div class="icon">🦁</div>
+      <div class="icon">🏔️</div>
+      <div class="icon">📚</div>
+      <div class="icon">🚗</div>
+    </div>
+    <div class="controls">
+      <button id="btn-start" class="btn primary">Start</button>
+      <button id="btn-music" class="btn">🎵 Música: Off</button>
+    </div>
+  </div>
+
+  <div id="game-screen" class="screen hidden">
+    <div class="topbar">
+      <div class="level-indicator"></div>
+      <div class="progress">
+        <div class="progress-bar"><span class="progress-fill"></span></div>
+        <div class="progress-text"></div>
+      </div>
+      <div class="stars">
+        <span class="star">☆</span><span class="star">☆</span><span class="star">☆</span>
+      </div>
+    </div>
+    <div id="cards"></div>
+    <div class="bottom-actions">
+      <button id="btn-next" class="btn primary hidden">Siguiente nivel</button>
+    </div>
+  </div>
+
+  <div id="final-screen" class="screen hidden">
+    <div class="title">Great job! You are now a Comparative & Superlative Master!</div>
+    <div id="confetti"></div>
+    <div class="controls">
+      <button id="btn-restart" class="btn primary">Repetir juego</button>
+      <button id="btn-answers" class="btn">Ver respuestas correctas</button>
+    </div>
+  </div>
+
+  <div id="sparkle"></div>
+
+  <div id="answers-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>Respuestas correctas</div>
+        <button id="btn-close" class="btn">Cerrar</button>
+      </div>
+      <div id="answers"></div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
